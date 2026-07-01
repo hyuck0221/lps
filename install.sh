@@ -32,31 +32,22 @@ if [[ -n "${SCRIPT_PATH}" && -f "${SCRIPT_PATH}" ]]; then
 fi
 
 download_release_source() {
-  local temp_dir archive_url archive_path extract_dir
+  local temp_dir latest_url tag version archive_url archive_path extract_dir
   temp_dir="$(mktemp -d)"
   archive_path="${temp_dir}/local-process.tar.gz"
   extract_dir="${temp_dir}/extract"
   mkdir -p "${extract_dir}"
 
-  archive_url="$(LPS_REPO="${RELEASE_REPOSITORY}" node <<'NODE'
-const repo = process.env.LPS_REPO;
-const response = await fetch(`https://api.github.com/repos/${repo}/releases/latest`, {
-  headers: {
-    accept: 'application/vnd.github+json',
-    'user-agent': 'local-process-installer'
-  }
-});
-if (!response.ok) {
-  throw new Error(`GitHub responded with ${response.status}`);
-}
-const release = await response.json();
-const asset = (release.assets || []).find((item) => /^local-process-.+\.tar\.gz$/.test(item.name));
-if (!asset) {
-  throw new Error('Release archive was not found.');
-}
-process.stdout.write(asset.browser_download_url);
-NODE
-)"
+  latest_url="$(curl -fsSL -o /dev/null -w '%{url_effective}' "https://github.com/${RELEASE_REPOSITORY}/releases/latest")"
+  tag="${latest_url##*/}"
+  version="${tag#v}"
+
+  if [[ -z "${tag}" || "${tag}" == "latest" || "${version}" == "${tag}" ]]; then
+    echo "Could not resolve latest release tag for ${RELEASE_REPOSITORY}." >&2
+    exit 1
+  fi
+
+  archive_url="https://github.com/${RELEASE_REPOSITORY}/releases/download/${tag}/local-process-${version}.tar.gz"
 
   curl -fsSL "${archive_url}" -o "${archive_path}"
   tar -xzf "${archive_path}" -C "${extract_dir}"
