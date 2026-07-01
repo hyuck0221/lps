@@ -17,18 +17,21 @@ if [[ "${NODE_MAJOR}" -lt 18 ]]; then
   exit 1
 fi
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 APP_DIR="${HOME}/.local-process/app"
 BIN_DIR="${HOME}/.local/bin"
 RELEASE_REPOSITORY="${LPS_REPO:-__LPS_RELEASE_REPOSITORY__}"
 
-download_release_source() {
-  if [[ "${RELEASE_REPOSITORY}" == "__LPS_RELEASE_REPOSITORY__" || -z "${RELEASE_REPOSITORY}" ]]; then
-    echo "This installer was not bundled with a GitHub repository." >&2
-    echo "Run from a local checkout, or set LPS_REPO=owner/repo before running it." >&2
-    exit 1
-  fi
+if [[ "${RELEASE_REPOSITORY}" == "__LPS_RELEASE_REPOSITORY__" || -z "${RELEASE_REPOSITORY}" ]]; then
+  RELEASE_REPOSITORY="hyuck0221/lps"
+fi
 
+SCRIPT_PATH="${BASH_SOURCE[0]:-}"
+SCRIPT_DIR=""
+if [[ -n "${SCRIPT_PATH}" && -f "${SCRIPT_PATH}" ]]; then
+  SCRIPT_DIR="$(cd "$(dirname "${SCRIPT_PATH}")" && pwd)"
+fi
+
+download_release_source() {
   local temp_dir archive_url archive_path extract_dir
   temp_dir="$(mktemp -d)"
   archive_path="${temp_dir}/local-process.tar.gz"
@@ -73,7 +76,7 @@ NODE
 }
 
 SOURCE_DIR="${SCRIPT_DIR}"
-if [[ ! -f "${SOURCE_DIR}/package.json" ]]; then
+if [[ -z "${SOURCE_DIR}" || ! -f "${SOURCE_DIR}/package.json" ]]; then
   SOURCE_DIR="$(download_release_source)"
 fi
 
