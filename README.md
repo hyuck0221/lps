@@ -7,7 +7,7 @@ Everything is installed, configured, and started with the `lps` CLI.
 ## Installation
 
 ```sh
-curl -fsSL https://github.com/OWNER/REPO/releases/latest/download/install.sh | bash
+curl -fsSL https://github.com/hyuck0221/lps/releases/latest/download/install.sh | bash
 ```
 
 ## Initial Setup
