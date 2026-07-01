@@ -1,6 +1,6 @@
 {
   "name": "local-process",
-  "version": "0.1.0",
+  "version": "1.0.1",
   "description": "A simple dark local process monitor for macOS with CLI setup and keyboard-first GUI controls.",
   "type": "module",
   "bin": {
