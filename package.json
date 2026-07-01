@@ -1,0 +1,28 @@
+{
+  "name": "local-process",
+  "version": "0.1.0",
+  "description": "A simple dark local process monitor for macOS with CLI setup and keyboard-first GUI controls.",
+  "type": "module",
+  "bin": {
+    "lps": "./bin/lps.js"
+  },
+  "scripts": {
+    "start": "node ./bin/lps.js serve",
+    "test": "node --test"
+  },
+  "keywords": [
+    "macos",
+    "process",
+    "monitor",
+    "cli"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hyuck0221/lps.git"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Local Process</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div>
+          <h1>Local Process</h1>
+          <p id="subtitle">Watching localhost</p>
+        </div>
+        <div class="topbar__meta">
+          <span id="cpu-total">CPU 0.0%</span>
+          <span id="memory-total">Mem 0.0%</span>
+          <span id="process-count">0 processes</span>
+          <span id="updated-at">Waiting</span>
+          <button id="refresh-toggle" class="meta-button" type="button" aria-pressed="false">Pause</button>
+        </div>
+      </header>
+
+      <section id="ai-panel" class="ai-panel" hidden>
+        <div class="section-heading">
+          <h2>AI CLI</h2>
+        </div>
+        <div id="ai-list" class="ai-list"></div>
+      </section>
+
+      <section id="ports-panel" class="ports-panel" hidden>
+        <div class="section-heading">
+          <h2>Open Ports</h2>
+          <span id="ports-count">0</span>
+        </div>
+        <div class="ports-table">
+          <div class="ports-grid ports-grid--head">
+            <span>Port</span>
+            <span>Address</span>
+            <span>PID</span>
+            <span>Command</span>
+          </div>
+          <div id="ports-list"></div>
+        </div>
+      </section>
+
+      <section class="process-section">
+        <div class="section-heading section-heading--process">
+          <div class="section-title">
+            <h2>All Processes</h2>
+            <span id="all-count">0</span>
+          </div>
+          <label class="process-search">
+            <span class="sr-only">Search processes</span>
+            <input id="process-search" type="search" placeholder="Search PID, user, command..." autocomplete="off" />
+          </label>
+        </div>
+        <div class="table-shell" data-section="all">
+          <div id="process-header" class="process-grid process-grid--head"></div>
+          <div id="all-processes" class="process-list"></div>
+        </div>
+      </section>
+    </main>
+
+    <aside class="version-badge" aria-live="polite">
+      <span id="version-label">v0.0.0</span>
+      <button id="update-button" class="update-button" type="button" hidden>Update</button>
+    </aside>
+
+    <dialog id="confirm-dialog" class="confirm-dialog">
+      <form method="dialog">
+        <h2>Terminate process?</h2>
+        <p id="confirm-text"></p>
+        <div class="confirm-actions">
+          <button value="cancel" class="button button--quiet">Cancel</button>
+          <button id="confirm-kill" value="kill" class="button button--danger">Kill</button>
+        </div>
+      </form>
+    </dialog>
+
+    <script src="/app.js" type="module"></script>
+  </body>
+</html>
